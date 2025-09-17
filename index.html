@@ -64,6 +64,18 @@
                 padding: 8px 12px !important;
                 font-size: 0.9rem !important;
             }
+            
+            .universal-search-container {
+                padding: 10px 15px !important;
+            }
+            
+            .search-results-container {
+                padding: 15px !important;
+            }
+            
+            .result-item {
+                padding: 12px !important;
+            }
         }
 
         .container {
@@ -142,6 +154,10 @@
             background: linear-gradient(135deg, #a66729 0%, #d6a100 100%);
         }
 
+        .set-card.combined {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+        }
+
         .set-card:hover {
             transform: translateY(-5px);
         }
@@ -201,7 +217,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 10px;
+            margin-top: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -250,6 +266,113 @@
             display: flex;
             justify-content: center;
             gap: 15px;
+        }
+
+        /* Universal Search */
+        .universal-search-container {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .universal-search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .universal-search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #34495e;
+            background: #ecf0f1;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .universal-search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+
+        .universal-search-reset {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .universal-search-reset:hover {
+            color: #e74c3c;
+        }
+
+        .search-results-container {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .search-results-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #ecf0f1;
+            font-weight: 600;
+        }
+
+        .result-item {
+            background: #34495e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .result-word {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ecf0f1;
+            margin-bottom: 5px;
+        }
+
+        .result-meaning {
+            color: #bdc3c7;
+            margin-bottom: 8px;
+        }
+
+        .result-set {
+            font-size: 0.85rem;
+            color: #3498db;
+            font-style: italic;
+        }
+
+        .match {
+            font-weight: bold;
+            text-decoration: underline;
+            background-color: rgba(255, 255, 0, 0.3);
+        }
+
+        .no-results {
+            text-align: center;
+            color: #bdc3c7;
+            padding: 20px;
+            font-style: italic;
         }
 
         /* Mode Selection View */
@@ -420,6 +543,7 @@
 
         .question-text {
             font-weight: bold;
+            font-size: 1.1rem;
         }
 
         .answer-text {
@@ -487,10 +611,12 @@
         .question-text-large {
             font-size: 1.5rem;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
         .answer-text-large {
             font-size: 1.3rem;
+            font-weight: bold;
         }
 
         .card-controls {
@@ -636,6 +762,8 @@
             display: flex;
             justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .feedback {
@@ -681,6 +809,7 @@
             color: #ecf0f1;
             font-size: 1.1rem;
             transition: all 0.2s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .answer-input:focus {
@@ -922,6 +1051,15 @@
                 width: 100%;
                 text-align: left;
             }
+            
+            .options-container.grid-4,
+            .options-container.grid-6 {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .answer-compare {
+                flex-direction: column;
+            }
         }
 
         .view-title {
@@ -1007,6 +1145,7 @@
         .match {
             font-weight: bold;
             text-decoration: underline;
+            background-color: rgba(255, 255, 0, 0.3);
         }
         
         /* Swap button in mode selection */
@@ -1029,6 +1168,13 @@
         .quiz-no-options-view .progress-text {
             display: none;
         }
+        
+        .hint {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 15px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -1036,7 +1182,6 @@
         <header>
             <h1>StudyMaster</h1>
             <p class="tagline">Master French verbs with interactive flashcards and quizzes</p>
-            <button class="reset-progress-btn" id="reset-progress-btn">Reset Progress</button>
         </header>
 
         <!-- Confirmation Modal -->
@@ -1054,8 +1199,28 @@
         <!-- Set Selection View -->
         <div id="set-selection-view" class="view active-view">
             <h2 class="view-title">Select a Question Set</h2>
+            
+            <!-- Universal Search Container -->
+            <div class="universal-search-container">
+                <div class="universal-search-wrapper">
+                    <input type="text" class="universal-search-input" id="universal-search-input" placeholder="Search all verbs and translations...">
+                    <button class="universal-search-reset" id="universal-search-reset">×</button>
+                </div>
+                <div class="search-results-container" id="search-results-container">
+                    <div class="search-results-title">Search Results</div>
+                    <div id="search-results-list">
+                        <!-- Search results will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
             <div class="set-grid" id="set-grid">
                 <!-- Set cards will be dynamically generated -->
+            </div>
+            
+            <!-- Reset Progress Button (moved below the set grid) -->
+            <div style="text-align: center;">
+                <button class="reset-progress-btn" id="reset-progress-btn">Reset Progress</button>
             </div>
         </div>
 
@@ -1168,7 +1333,7 @@
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
                 <div class="quiz-header">
-                    <div class="progress-text" id="progress-text">Question 1 of 200</div>
+                    <div class="progress-text" id="progress-text">Question 1 of 10</div>
                     <div class="best-score" id="best-score">Best: Not set</div>
                 </div>
                 <div class="quiz-question" id="quiz-question">What is the English translation of "être"?</div>
@@ -1177,6 +1342,11 @@
                 </div>
                 
                 <div id="feedback-container"></div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-secondary" id="quiz-prev-btn" style="display: none;">Previous</button>
+                    <button class="btn btn-primary" id="quiz-next-btn" style="display: none;">Next Question</button>
+                </div>
             </div>
             
             <!-- FAB Buttons for Mobile - Top positioned -->
@@ -1199,7 +1369,7 @@
                     <div class="progress-bar" id="no-options-progress-bar-inner"></div>
                 </div>
                 <div class="quiz-header">
-                    <div class="progress-text" id="no-options-progress-text">Question 1 of 200</div>
+                    <div class="progress-text" id="no-options-progress-text">Question 1 of 10</div>
                     <div class="best-score" id="no-options-best-score">Best: Not set</div>
                 </div>
                 <div class="quiz-question" id="no-options-question">What is the English translation of "être"?</div>
@@ -1236,7 +1406,7 @@
                     <div class="score-percentage" id="score-percentage">80%</div>
                     <div class="score-text">Score</div>
                 </div>
-                <p id="score-description">You answered 160 out of 200 questions correctly</p>
+                <p id="score-description">You answered 8 out of 10 questions correctly</p>
                 
                 <div class="incorrect-questions" id="incorrect-questions">
                     <h3 class="incorrect-title">Verbs to Review</h3>
@@ -1253,8 +1423,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // French verbs question sets with synonyms and accents
-            const questionSets = [
+            // Comprehensive list of French verbs with translations
+            const regularSets = [
                 {
                     title: "Translating French Verbs",
                     icon: "fas fa-language",
@@ -5904,6 +6074,21 @@
 }
             ];
 
+            // Create a combined set with all questions
+            const combinedSet = {
+                title: "All Verbs Combined",
+                icon: "fas fa-star",
+                questions: []
+            };
+
+            // Add all questions from regular sets to the combined set
+            regularSets.forEach(set => {
+                combinedSet.questions = combinedSet.questions.concat(set.questions);
+            });
+
+            // Add the combined set to the question sets
+            const questionSets = [...regularSets, combinedSet];
+
             // DOM Elements
             const views = document.querySelectorAll('.view');
             const setSelectionView = document.getElementById('set-selection-view');
@@ -5932,6 +6117,8 @@
             const feedbackContainer = document.getElementById('feedback-container');
             const quizProgressBar = document.getElementById('quiz-progress-bar');
             const progressBar = document.getElementById('progress-bar');
+            const quizPrevBtn = document.getElementById('quiz-prev-btn');
+            const quizNextBtn = document.getElementById('quiz-next-btn');
             
             const noOptionsProgressText = document.getElementById('no-options-progress-text');
             const noOptionsBestScoreText = document.getElementById('no-options-best-score');
@@ -5975,6 +6162,12 @@
             const fabNoOptionsChangeSet = document.getElementById('fab-no-options-change-set');
             const fabChangeMode = document.getElementById('fab-change-mode');
 
+            // Universal search elements
+            const universalSearchInput = document.getElementById('universal-search-input');
+            const universalSearchReset = document.getElementById('universal-search-reset');
+            const searchResultsContainer = document.getElementById('search-results-container');
+            const searchResultsList = document.getElementById('search-results-list');
+
             // Current state
             let currentSetIndex = 0;
             let currentMode = '';
@@ -5997,6 +6190,22 @@
                 const storedAchievements = localStorage.getItem('studyMasterAchievements');
                 if (storedAchievements) {
                     achievements = JSON.parse(storedAchievements);
+                    
+                    // Check if we need to add new sets to achievements
+                    let needsUpdate = false;
+                    for (let i = 0; i < questionSets.length; i++) {
+                        if (!achievements[`set${i}`]) {
+                            achievements[`set${i}`] = {
+                                quiz: 0,
+                                typeAnswer: 0
+                            };
+                            needsUpdate = true;
+                        }
+                    }
+                    
+                    if (needsUpdate) {
+                        saveAchievements();
+                    }
                 } else {
                     // Initialize empty achievements object
                     achievements = {};
@@ -6135,6 +6344,11 @@
                     setCard.className = 'set-card';
                     setCard.dataset.set = index;
                     
+                    // Add special class for combined set
+                    if (set.title === "All Verbs Combined") {
+                        setCard.classList.add('combined');
+                    }
+                    
                     // Add badges for achievements
                     const setKey = `set${index}`;
                     const badgesHtml = `
@@ -6149,7 +6363,7 @@
                         ${badgesHtml}
                         <div class="set-icon"><i class="${set.icon}"></i></div>
                         <div class="set-title">${set.title}</div>
-                        <div class="set-count">${set.questions.length} questions</div>
+                        <div class="set-count">${set.questions.length} verbs</div>
                     `;
                     
                     setCard.addEventListener('click', function() {
@@ -6237,6 +6451,82 @@
                 });
                 
                 return hasMatches;
+            }
+            
+            // Universal search function
+            function performUniversalSearch(searchTerm) {
+                if (!searchTerm.trim()) {
+                    searchResultsContainer.style.display = 'none';
+                    setGrid.style.display = 'grid';
+                    return;
+                }
+                
+                const normalizedSearch = normalizeString(searchTerm);
+                const results = [];
+                
+                // Search through all sets
+                questionSets.forEach(set => {
+                    set.questions.forEach(q => {
+                        const normalizedQuestion = normalizeString(q.question);
+                        const normalizedAnswer = normalizeString(q.answer);
+                        
+                        if (normalizedQuestion.includes(normalizedSearch) || normalizedAnswer.includes(normalizedSearch)) {
+                            results.push({
+                                word: q.question,
+                                meaning: q.answer,
+                                set: set.title,
+                                isQuestionMatch: normalizedQuestion.includes(normalizedSearch),
+                                isAnswerMatch: normalizedAnswer.includes(normalizedSearch)
+                            });
+                        }
+                    });
+                });
+                
+                // Display results
+                displaySearchResults(results, searchTerm);
+                
+                // Show results container, hide set grid
+                searchResultsContainer.style.display = 'block';
+                setGrid.style.display = 'none';
+            }
+            
+            // Display search results
+            function displaySearchResults(results, searchTerm) {
+                if (results.length === 0) {
+                    searchResultsList.innerHTML = '<div class="no-results">No matching verbs found</div>';
+                    return;
+                }
+                
+                searchResultsList.innerHTML = '';
+                
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    // Highlight matches
+                    const highlightedWord = highlightText(result.word, 
+                        result.isQuestionMatch ? searchTerm : '');
+                    const highlightedMeaning = highlightText(result.meaning, 
+                        result.isAnswerMatch ? searchTerm : '');
+                    
+                    resultItem.innerHTML = `
+                        <div class="result-word">${highlightedWord}</div>
+                        <div class="result-meaning">${highlightedMeaning}</div>
+                        <div class="result-set">From: ${result.set}</div>
+                    `;
+                    
+                    searchResultsList.appendChild(resultItem);
+                });
+            }
+            
+            // Function to toggle FAB buttons visibility
+            function toggleFabButtons(show) {
+                if (window.innerWidth <= 768) {
+                    const fabButtons = document.querySelectorAll('.fab');
+                    fabButtons.forEach(button => {
+                        button.style.display = show ? 'flex' : 'none';
+                    });
+                }
             }
             
             // Event Listeners
@@ -6358,6 +6648,38 @@
                 flashcard.classList.toggle('flipped');
             });
             
+            // Universal search event listeners
+            universalSearchInput.addEventListener('input', () => {
+                performUniversalSearch(universalSearchInput.value);
+            });
+            
+            universalSearchReset.addEventListener('click', () => {
+                universalSearchInput.value = '';
+                performUniversalSearch('');
+                setGrid.style.display = 'grid';
+            });
+            
+            // Hide FAB buttons when searching on mobile
+            universalSearchInput.addEventListener('focus', () => {
+                toggleFabButtons(false);
+            });
+            
+            universalSearchInput.addEventListener('blur', () => {
+                if (universalSearchInput.value === '') {
+                    toggleFabButtons(true);
+                }
+            });
+            
+            questionSearch.addEventListener('focus', () => {
+                toggleFabButtons(false);
+            });
+            
+            questionSearch.addEventListener('blur', () => {
+                if (questionSearch.value === '') {
+                    toggleFabButtons(true);
+                }
+            });
+            
             // Swipe functionality for mobile flashcards
             flashcard.addEventListener('touchstart', e => {
                 touchStartX = e.changedTouches[0].screenX;
@@ -6445,6 +6767,14 @@
             
             submitAnswerBtn.addEventListener('click', handleAnswerSubmission);
             
+            // Quiz navigation buttons
+            quizNextBtn.addEventListener('click', proceedToNextQuestion);
+            quizPrevBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    showQuizQuestion(currentQuestionIndex - 1);
+                }
+            });
+            
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 // Only enable shortcuts if we're not in an input field
@@ -6504,6 +6834,16 @@
                 } else {
                     resetProgressBtn.style.display = 'none';
                 }
+                
+                // Reset universal search when leaving set selection view
+                if (view.id !== 'set-selection-view') {
+                    universalSearchInput.value = '';
+                    searchResultsContainer.style.display = 'none';
+                    setGrid.style.display = 'grid';
+                }
+                
+                // Show FAB buttons when changing views (if on mobile)
+                toggleFabButtons(true);
             }
             
             function initializeFlashcardView() {
@@ -6593,7 +6933,7 @@
                 // Create a shuffled copy of the questions for this session
                 sessionQuestions = [...questionSets[currentSetIndex].questions];
                 for (let i = sessionQuestions.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() (i + 1));
+                    const j = Math.floor(Math.random() * (i + 1));
                     [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
                 }
                 
@@ -6614,7 +6954,7 @@
                 // Create a shuffled copy of the questions for this session
                 sessionQuestions = [...questionSets[currentSetIndex].questions];
                 for (let i = sessionQuestions.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() (i + 1));
+                    const j = Math.floor(Math.random() * (i + 1));
                     [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
                 }
                 
@@ -6668,7 +7008,7 @@
                 
                 // Shuffle the other answers
                 for (let i = otherAnswers.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() (i + 1));
+                    const j = Math.floor(Math.random() * (i + 1));
                     [otherAnswers[i], otherAnswers[j]] = [otherAnswers[j], otherAnswers[i]];
                 }
                 
@@ -6686,7 +7026,7 @@
                 
                 // Shuffle the options so the correct answer isn't always first
                 for (let i = options.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() (i + 1));
+                    const j = Math.floor(Math.random() * (i + 1));
                     [options[i], options[j]] = [options[j], options[i]];
                 }
                 
@@ -6744,6 +7084,10 @@
                     optionsContainer.appendChild(optionElement);
                 });
                 
+                // Show navigation buttons
+                quizPrevBtn.style.display = index > 0 ? 'block' : 'none';
+                quizNextBtn.style.display = 'none'; // Will be shown after answer is selected
+                
                 currentQuestionIndex = index;
                 saveAppState();
             }
@@ -6783,15 +7127,13 @@
                     }
                 });
                 
+                // Show next button
+                quizNextBtn.style.display = 'block';
+                
                 // Vibrate on incorrect answer (mobile only)
                 if (!isCorrect && 'vibrate' in navigator) {
                     navigator.vibrate(200);
                 }
-                
-                // Automatically proceed to next question after a delay
-                setTimeout(() => {
-                    proceedToNextQuestion();
-                }, 1500);
             }
             
             function checkAnswer(userAnswer, correctAnswer) {
