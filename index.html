@@ -1175,6 +1175,14 @@
             margin-top: 15px;
             font-style: italic;
         }
+
+        /* Auto-advance countdown */
+        .countdown {
+            font-size: 1rem;
+            color: #bdc3c7;
+            margin-top: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -6181,6 +6189,7 @@
             let touchStartX = 0;
             let touchEndX = 0;
             let quizEndedEarly = false; // Track if quiz was ended early
+            let autoAdvanceTimer = null; // Timer for auto-advance feature
             
             // Color options for quiz
             const optionColors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
@@ -6529,6 +6538,14 @@
                 }
             }
             
+            // Clear auto-advance timer
+            function clearAutoAdvanceTimer() {
+                if (autoAdvanceTimer) {
+                    clearTimeout(autoAdvanceTimer);
+                    autoAdvanceTimer = null;
+                }
+            }
+            
             // Event Listeners
             modeCards.forEach(card => {
                 card.addEventListener('click', function() {
@@ -6624,15 +6641,22 @@
             });
             
             toggleQuestionsBtn.addEventListener('click', () => {
+                const isActive = !questionSidebar.classList.contains('active');
                 questionSidebar.classList.toggle('active');
                 sidebarBackdrop.classList.toggle('active');
-                toggleQuestionsBtn.textContent = questionSidebar.classList.contains('active') ? 'Hide Verbs' : 'Show Verbs';
+                toggleQuestionsBtn.textContent = isActive ? 'Hide Verbs' : 'Show Verbs';
+                
+                // Hide FAB buttons when sidebar is active, show when inactive
+                toggleFabButtons(!isActive);
             });
             
             sidebarBackdrop.addEventListener('click', () => {
                 questionSidebar.classList.remove('active');
                 sidebarBackdrop.classList.remove('active');
                 toggleQuestionsBtn.textContent = 'Show Verbs';
+                
+                // Show FAB buttons when sidebar is closed
+                toggleFabButtons(true);
             });
             
             questionSearch.addEventListener('input', () => {
@@ -6876,6 +6900,8 @@
                             questionSidebar.classList.remove('active');
                             sidebarBackdrop.classList.remove('active');
                             toggleQuestionsBtn.textContent = 'Show Verbs';
+                            // Also show FAB buttons
+                            toggleFabButtons(true);
                         }
                     });
                     questionList.appendChild(questionItem);
@@ -7127,13 +7153,41 @@
                     }
                 });
                 
-                // Show next button
-                quizNextBtn.style.display = 'block';
+                // Start auto-advance countdown
+                startAutoAdvanceCountdown();
                 
                 // Vibrate on incorrect answer (mobile only)
                 if (!isCorrect && 'vibrate' in navigator) {
                     navigator.vibrate(200);
                 }
+            }
+            
+            // Start auto-advance countdown
+            function startAutoAdvanceCountdown() {
+                clearAutoAdvanceTimer();
+                
+                let secondsLeft = 1.5;
+                const countdownElement = document.createElement('div');
+                countdownElement.className = 'countdown';
+                countdownElement.textContent = `Next question in ${secondsLeft.toFixed(1)}s`;
+                feedbackContainer.appendChild(countdownElement);
+                
+                // Update countdown every 100ms
+                const countdownInterval = setInterval(() => {
+                    secondsLeft -= 0.1;
+                    if (secondsLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        proceedToNextQuestion();
+                    } else {
+                        countdownElement.textContent = `Next question in ${secondsLeft.toFixed(1)}s`;
+                    }
+                }, 100);
+                
+                // Set timeout to proceed to next question
+                autoAdvanceTimer = setTimeout(() => {
+                    clearInterval(countdownInterval);
+                    proceedToNextQuestion();
+                }, 1500);
             }
             
             function checkAnswer(userAnswer, correctAnswer) {
@@ -7175,10 +7229,11 @@
                 
                 noOptionsFeedbackContainer.appendChild(feedbackElement);
                 
-                // Vibrate on incorrect answer (mobile only)
-                if (!isCorrect && 'vibrate' in navigator) {
-                    navigator.vibrate(200);
-                }
+                // Add countdown for auto-advance
+                const countdownElement = document.createElement('div');
+                countdownElement.className = 'countdown';
+                countdownElement.textContent = 'Next question in 1.5s';
+                noOptionsFeedbackContainer.appendChild(countdownElement);
                 
                 // Disable input and button
                 answerInput.disabled = true;
@@ -7186,9 +7241,14 @@
                 submitAnswerBtn.textContent = 'Next...';
                 
                 // Automatically proceed to next question after a delay
-                setTimeout(() => {
+                autoAdvanceTimer = setTimeout(() => {
                     proceedToNextQuestionNoOptions();
                 }, 1500);
+                
+                // Vibrate on incorrect answer (mobile only)
+                if (!isCorrect && 'vibrate' in navigator) {
+                    navigator.vibrate(200);
+                }
             }
             
             function proceedToNextQuestionNoOptions() {
@@ -7207,6 +7267,8 @@
             }
             
             function proceedToNextQuestion() {
+                clearAutoAdvanceTimer();
+                
                 if (currentQuestionIndex < sessionQuestions.length - 1) {
                     selectedOptionIndex = null;
                     showQuizQuestion(currentQuestionIndex + 1);
@@ -7218,6 +7280,7 @@
             }
             
             function endQuizEarly() {
+                clearAutoAdvanceTimer();
                 quizEndedEarly = true; // Set the flag to indicate quiz was ended early
                 
                 // Calculate score based on answered questions only
@@ -7290,6 +7353,7 @@
             }
             
             function finishQuiz() {
+                clearAutoAdvanceTimer();
                 quizEndedEarly = false; // Reset the early end flag for completed quizzes
                 
                 // Calculate score
